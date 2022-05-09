@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -62,23 +63,64 @@ void selectionSort(vector<int> &numbers) {
 
 void insertionSort(vector<int> &numbers) {
 
-
+    for (int i=1; i<numbers.size(); i++) {
+        int j=i;
+        while ((j>0) && (numbers[j] < numbers[j-1])) {
+            int temp = numbers[j];
+            numbers[j] = numbers[j-1];
+            numbers[j-1] = temp;
+            j--;
+        }
+    }
 
 }
 
 void merge(vector<int> left, vector<int> right, vector<int> &result) {
 
-
+    int i=0;
+    int j=0;
+    int k=0;
+    while ((i<left.size()) && (j<right.size())) {
+        if (left[i] < right[j]) {
+            result[k] = left[i];
+            i++;
+        } else {
+            result[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+    while (i<left.size()) {
+        result[k] = left[i];
+        i++; k++;
+    }
+    while (j<right.size()) {
+        result[k] = right[j];
+        j++; k++;
+    }
 
 }
 
 void mergeSort(vector<int> &numbers) {
 
-
+    if (numbers.size() <=1) return;
+    int mid = numbers.size() / 2;
+    vector<int> leftHalf;
+    for (int i = 0; i<mid; i++) {
+        leftHalf.push_back(numbers[i]);
+    }
+    mergeSort(leftHalf);
+    vector<int> rightHalf;
+    for (int i=mid; i<numbers.size(); i++) {
+        rightHalf.push_back(numbers[i]);
+    }
+    mergeSort(rightHalf);
+    merge(leftHalf, rightHalf, numbers);
 
 }
 
 
+bool decreasingComparador(int a, int b) { return a > b; }
 
 
 int main() {
@@ -95,15 +137,17 @@ int main() {
     cout << "Position of 7 is: " << binarySearch(myNumbers,7) << endl;
     cout << "Position of 8 is: " << binarySearch(myNumbers,8) << endl;
     cout << "Position of 9 is: " << binarySearch(myNumbers,9) << endl;
+    
+    vector<int> unsortedNumbers { 5, 7, 6, 8, 4, 3, 0, 1, 2 };
+    sort(unsortedNumbers.begin(), unsortedNumbers.end(),[](int  a, int b) { return a > b; });
 
-    vector<int> unsortedNumbers { 8, 7, 6, 5, 4, 3, 2, 1, 0 };
-    selectionSort(unsortedNumbers);
+    // [](double x) { return x * x;}  --->  f(x) = x^2
+
     cout  << "Sorted Numbers: ";
     for (int i=0; i<unsortedNumbers.size(); i++) {
         cout <<  unsortedNumbers[i] << ",";
     }
     cout << endl;
-    unsortedNumbers;
 
     cout << "End" << endl;
 
